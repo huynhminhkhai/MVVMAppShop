@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.khai.dev.mvvmappshop"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.khai.dev.mvvmappshop"
@@ -67,12 +67,21 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    val nav_version = "2.8.0"
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.google.accompanist:accompanist-coil:0.10.0")
 
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    //liveData
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
+
 }
