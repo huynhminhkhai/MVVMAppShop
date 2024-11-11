@@ -4,11 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.khai.dev.mvvmappshop.models.welcome.WelcomeModel
-import com.khai.dev.mvvmappshop.repositores.WelcomeRepository
-import kotlinx.coroutines.Dispatchers
+import com.khai.dev.mvvmappshop.models.auth.WelcomeModel
+import com.khai.dev.mvvmappshop.repositories.WelcomeRepository
 import kotlinx.coroutines.launch
 
 class WelcomeViewModel : ViewModel() {

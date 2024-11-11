@@ -1,8 +1,8 @@
-package com.khai.dev.mvvmappshop.repositores
+package com.khai.dev.mvvmappshop.repositories
 
 import android.util.Log
-import com.khai.dev.mvvmappshop.models.welcome.WelcomeModel
-import com.khai.dev.mvvmappshop.services.RetrofitInstance
+import com.khai.dev.mvvmappshop.models.auth.WelcomeModel
+import com.khai.dev.mvvmappshop.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

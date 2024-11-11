@@ -1,4 +1,4 @@
-package com.khai.dev.mvvmappshop.models.welcome
+package com.khai.dev.mvvmappshop.models.auth
 
 import com.google.gson.annotations.SerializedName
 import com.khai.dev.mvvmappshop.utils.BaseApiConfig

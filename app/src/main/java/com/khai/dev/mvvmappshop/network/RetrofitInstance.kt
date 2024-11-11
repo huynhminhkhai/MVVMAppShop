@@ -1,4 +1,4 @@
-package com.khai.dev.mvvmappshop.services
+package com.khai.dev.mvvmappshop.network
 
 // api/RetrofitInstance.kt
 import com.khai.dev.mvvmappshop.utils.BaseApiConfig

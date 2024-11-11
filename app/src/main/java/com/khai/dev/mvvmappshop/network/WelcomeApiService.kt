@@ -1,6 +1,6 @@
-package com.khai.dev.mvvmappshop.services
+package com.khai.dev.mvvmappshop.network
 
-import com.khai.dev.mvvmappshop.models.welcome.WelcomeModel
+import com.khai.dev.mvvmappshop.models.auth.WelcomeModel
 import retrofit2.http.GET
 
 interface WelcomeApiService {
