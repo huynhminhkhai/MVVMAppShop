@@ -20,4 +20,15 @@ object RetrofitInstance {
     val welcomeApiService: WelcomeApiService by lazy {
         retrofit.create(WelcomeApiService::class.java)
     }
+
+    // API service cho Category
+    val categoryApiService: CategoryApiService by lazy {
+        retrofit.create(CategoryApiService::class.java)
+    }
+
+    // API service cho Product
+    val productApiService: ProductApiService by lazy {
+        retrofit.create(ProductApiService::class.java)
+    }
+
 }

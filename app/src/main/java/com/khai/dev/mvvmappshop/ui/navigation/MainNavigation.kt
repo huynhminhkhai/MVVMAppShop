@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.khai.dev.mvvmappshop.ui.screen.auth.LoginScreen
 import com.khai.dev.mvvmappshop.ui.screen.auth.RegisterScreen
 import com.khai.dev.mvvmappshop.ui.screen.auth.WelcomeScreen
+import com.khai.dev.mvvmappshop.ui.screen.home.MyAppHome
 
 enum class Screen_main {
     home,
@@ -19,9 +20,10 @@ enum class Screen_main {
 
 @Composable
 fun MainNavigation(mainNavController: NavHostController) {
-    NavHost(navController = mainNavController, startDestination = Screen_main.welcome.name) {
+    NavHost(navController = mainNavController, startDestination = Screen_main.home.name ){
         composable(Screen_main.welcome.name) { WelcomeScreen(mainNavController) }
-        composable(Screen_main.login.name) { LoginScreen(mainNavController) }
-        composable(Screen_main.register.name) { RegisterScreen(mainNavController) }
-    }
+        composable(Screen_main.login.name) { LoginScreen(mainNavController)  }
+        composable(Screen_main.register.name){ RegisterScreen(mainNavController) }
+        composable(Screen_main.home.name){ MyAppHome(mainNavController) }
+        }
 }
