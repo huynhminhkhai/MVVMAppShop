@@ -32,8 +32,16 @@ class ProductRepository {
         return withContext(Dispatchers.IO) {
             try {
                 if (categoryId == 1L) {
-                    // Nếu categoryId là 1, lấy toàn bộ sản phẩm
-                    return@withContext getProducts()
+                    // Nếu categoryId là 1, lấy tất cả sản phẩm và chọn ngẫu nhiên
+                    val allProductsResult = getProducts()
+                    if (allProductsResult.isSuccess) {
+                        val allProducts = allProductsResult.getOrDefault(emptyList())
+                        val randomProducts = allProducts.shuffled().take(10) // Lấy ngẫu nhiên 10 sản phẩm
+                        Log.d("ProductsRepository", "Fetched random products: $randomProducts")
+                        Result.success(randomProducts)
+                    } else {
+                        Result.failure(allProductsResult.exceptionOrNull() ?: Exception("Unknown error"))
+                    }
                 } else {
                     // Gọi API với `categoryId` cụ thể
                     val response = RetrofitInstance.productApiService.getProductsByCategoryId(categoryId)
