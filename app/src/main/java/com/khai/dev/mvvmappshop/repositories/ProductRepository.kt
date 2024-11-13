@@ -26,4 +26,30 @@ class ProductRepository {
             }
         }
     }
+
+    // Hàm gọi API để lấy sản phẩm theo categoryId
+    suspend fun getProductsByCategoryId(categoryId: Long): Result<List<ProductModel>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (categoryId == 1L) {
+                    // Nếu categoryId là 1, lấy toàn bộ sản phẩm
+                    return@withContext getProducts()
+                } else {
+                    // Gọi API với `categoryId` cụ thể
+                    val response = RetrofitInstance.productApiService.getProductsByCategoryId(categoryId)
+                    if (response.isNotEmpty()) {
+                        Log.d("ProductsRepository", "Fetched products for category $categoryId: $response")
+                        Result.success(response)
+                    } else {
+                        Log.d("ProductsRepository", "No products found for category $categoryId.")
+                        Result.success(emptyList())
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("ProductsRepository", "Error fetching products for category $categoryId: ${e.message}")
+                Result.failure(e)
+            }
+        }
+    }
+
 }

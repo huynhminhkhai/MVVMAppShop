@@ -34,4 +34,16 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+    // Hàm lấy sản phẩm theo categoryId
+    fun getProductsByCategoryId(categoryId: Long) {
+        viewModelScope.launch {
+            val result = productRepository.getProductsByCategoryId(categoryId)
+            if (result.isSuccess) {
+                _products.postValue(result.getOrNull() ?: emptyList())
+            } else {
+                _products.postValue(emptyList())
+            }
+        }
+    }
 }

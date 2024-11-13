@@ -25,5 +25,5 @@ fun MainNavigation(mainNavController: NavHostController) {
         composable(Screen_main.login.name) { LoginScreen(mainNavController)  }
         composable(Screen_main.register.name){ RegisterScreen(mainNavController) }
         composable(Screen_main.home.name){ MyAppHome(mainNavController) }
-        }
+    }
 }

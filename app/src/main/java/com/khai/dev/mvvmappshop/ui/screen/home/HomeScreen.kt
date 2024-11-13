@@ -23,11 +23,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.khai.dev.mvvmappshop.R
 import com.khai.dev.mvvmappshop.models.home.CategoryModel
@@ -66,13 +64,18 @@ fun HomeScreen(
             .padding(top = 10.dp, end = 15.dp, start = 15.dp)
             .fillMaxHeight() // Đảm bảo chiếm toàn bộ chiều cao
     ) {
-        // Quan sát LiveData từ ViewModel
+        // Quan sát danh sách danh mục từ ViewModel
         val categories by categoryViewModel.categories.observeAsState(initial = emptyList())
+        var selectedCategoryId by remember { mutableLongStateOf(1L) } // Mặc định chọn danh mục đầu tiên
+
+//         Lấy danh sách sản phẩm theo ID danh mục khi ID danh mục thay đổi
+        LaunchedEffect(selectedCategoryId) {
+            productViewModel.getProductsByCategoryId(selectedCategoryId)
+        }
+
         val products by productViewModel.products.observeAsState(initial = emptyList())
 
-        var selectedCategoryId by remember { mutableLongStateOf(1L) }
-
-        // Danh sách danh mục
+        // Hiển thị danh sách danh mục
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -83,24 +86,25 @@ fun HomeScreen(
                     category = category,
                     isSelected = category.id == selectedCategoryId,
                     onClick = {
-                        selectedCategoryId = category.id // Update selected category ID
+                        selectedCategoryId = category.id // Cập nhật ID danh mục được chọn
                     }
                 )
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        // Danh sách sản phẩm
+
+        // Hiển thị danh sách sản phẩm theo danh mục đã chọn
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            items(products.chunked(2)) { products ->
+            items(products.chunked(2)) { rowProducts ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    products.forEach { product ->
+                    rowProducts.forEach { product ->
                         ProductItem(product = product, mainNavController)
                     }
                 }
@@ -108,6 +112,7 @@ fun HomeScreen(
         }
     }
 }
+
 @Composable
 fun ProductItem(product: ProductModel, mainNavController: NavController) {
     Column(
@@ -115,7 +120,8 @@ fun ProductItem(product: ProductModel, mainNavController: NavController) {
             .width(165.dp)
             .height(253.dp)
             .clickable {
-                mainNavController.navigate(Screen_main.detail.name+"/${product.id}")},
+                mainNavController.navigate("${Screen_main.detail.name}/${product.id}")
+            },
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Box(
@@ -126,7 +132,8 @@ fun ProductItem(product: ProductModel, mainNavController: NavController) {
             Image(
                 painter = rememberAsyncImagePainter(product.fullImageUrl),
                 modifier = Modifier.fillMaxSize(),
-                contentDescription = product.name
+                contentDescription = product.name,
+                contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
@@ -136,13 +143,13 @@ fun ProductItem(product: ProductModel, mainNavController: NavController) {
                 horizontalAlignment = Alignment.End
             ) {
                 Row {
-
+                    // Thêm các biểu tượng hoặc nhãn nếu cần
                 }
                 Row(
                     modifier = Modifier
                         .size(30.dp)
                         .shadow(elevation = 2.dp, RoundedCornerShape(6.dp))
-                        .background(color = Color("#95a5a6".toColorInt()))
+                        .background(Color("#95a5a6".toColorInt()))
                         .alpha(1f),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
@@ -160,21 +167,18 @@ fun ProductItem(product: ProductModel, mainNavController: NavController) {
             fontSize = 14.sp,
             color = Color.Gray,
             fontWeight = FontWeight(500),
-            fontFamily = FontFamily(
-                Font(R.font.nunitosans_7pt_condensed_light)
-            )
+            fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_light))
         )
         Text(
-            text = "\$ " + product.price,
+            text = "$${product.price}",
             fontSize = 14.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily(
-                Font(R.font.nunitosans_7pt_condensed_light)
-            )
+            fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_light))
         )
     }
 }
+
 @Composable
 fun CategoryCardItem(category: CategoryModel, isSelected: Boolean, onClick: () -> Unit) {
     Column(
@@ -190,7 +194,7 @@ fun CategoryCardItem(category: CategoryModel, isSelected: Boolean, onClick: () -
                 .shadow(elevation = 2.dp, RoundedCornerShape(14.dp))
                 .background(
                     color = if (isSelected) Color("#3d3d3d".toColorInt())
-                            else Color("#FFFFFF".toColorInt())
+                    else Color("#FFFFFF".toColorInt())
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -209,9 +213,7 @@ fun CategoryCardItem(category: CategoryModel, isSelected: Boolean, onClick: () -
             color = Color("#999999".toColorInt()),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily(
-                Font(R.font.nunitosans_7pt_condensed_light)
-            )
+            fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_light))
         )
     }
 }
