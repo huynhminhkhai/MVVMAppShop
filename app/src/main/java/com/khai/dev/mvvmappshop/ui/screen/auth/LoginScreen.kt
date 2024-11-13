@@ -21,6 +21,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,18 +37,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.khai.dev.mvvmappshop.R
+import com.khai.dev.mvvmappshop.models.auth.UserLoginModel
 import com.khai.dev.mvvmappshop.ui.component.CustomButton
 import com.khai.dev.mvvmappshop.ui.navigation.Screen_main
+import com.khai.dev.mvvmappshop.viewmodel.UserViewModel
 
-@Preview
 @Composable
-fun LoginScreen(mainNavigation: NavHostController) {
+fun LoginScreen(mainNavigation: NavHostController,
+                userViewModel: UserViewModel = viewModel()
+) {
+    // Trạng thái email và password
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    // Quan sát trạng thái đăng ký
+    val loginStatus by userViewModel.loginStatus.observeAsState()
+
+    // Xử lý kết quả đăng nhập
+    loginStatus?.let {
+        if (it.isSuccess) {
+            // Chuyển hướng tới màn hình Home khi đăng nhập thành công
+            mainNavigation.navigate(Screen_main.home.name)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,9 +139,6 @@ fun LoginScreen(mainNavigation: NavHostController) {
                     .padding(15.dp), verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var username by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
-                var passwordVisible by remember { mutableStateOf(false) }
                 Column {
                     Text(
                         text = "Email",
@@ -132,9 +148,9 @@ fun LoginScreen(mainNavigation: NavHostController) {
                         fontSize = 17.sp
                     )
                     TextField(
-                        value = username,
+                        value = email,
                         onValueChange = {
-                            username = it
+                            email = it
                         },
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -193,7 +209,9 @@ fun LoginScreen(mainNavigation: NavHostController) {
                 )
                 CustomButton(
                     text = "Log in",
-                    onClick = { /* Xử lý khi nhấn vào nút Log in */ }
+                    onClick = {
+                        userViewModel.login(UserLoginModel(email = email, password = password))
+                    }
                 )
                 CustomButton(
                     text = "SIGN UP",

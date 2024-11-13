@@ -31,4 +31,9 @@ object RetrofitInstance {
         retrofit.create(ProductApiService::class.java)
     }
 
+    // API service cho User
+    val userApiService: UserApiService by lazy {
+        retrofit.create(UserApiService::class.java)
+    }
+
 }

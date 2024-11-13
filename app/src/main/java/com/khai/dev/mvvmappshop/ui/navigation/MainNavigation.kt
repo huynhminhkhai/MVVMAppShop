@@ -21,7 +21,7 @@ enum class Screen_main {
 
 @Composable
 fun MainNavigation(mainNavController: NavHostController) {
-    NavHost(navController = mainNavController, startDestination = Screen_main.home.name) {
+    NavHost(navController = mainNavController, startDestination = Screen_main.welcome.name) {
         composable(Screen_main.welcome.name) { WelcomeScreen(mainNavController) }
         composable(Screen_main.login.name) { LoginScreen(mainNavController) }
         composable(Screen_main.register.name) { RegisterScreen(mainNavController) }
