@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -134,70 +135,90 @@ fun DetailProduct(
                     color = Color("#606060".toColorInt()),
                     fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_light))
                 )
-
-                // Nút "Add to Cart" sử dụng `CustomButton`
-                CustomButton(
-                    text = "Add to cart",
-                    onClick = {
-                        // Thêm logic "Add to cart" ở đây nếu cần
-                    },
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth(),
-                    backgroundColor = Color(0xFF242424),
-                    textColor = Color.White
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .size(60.dp)
+                            .shadow(elevation = 2.dp, RoundedCornerShape(8.dp))
+                            .background(color = Color("#F5F5F5".toColorInt())),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.marker),
+                            contentDescription = null,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                    Row {
+                        // Nút "Add to Cart" sử dụng `CustomButton`
+                        CustomButton(
+                            text = "Add to cart",
+                            onClick = {
+                                // Thêm logic "Add to cart" ở đây nếu cần
+                            },
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .fillMaxWidth(),
+                            backgroundColor = Color(0xFF242424),
+                            textColor = Color.White
+                        )
+                    }
+                }
+            }
+        } ?: run {
+            // Hiển thị thông báo loading hoặc thông báo lỗi nếu productDetail là null
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Loading...") // Hoặc sử dụng CircularProgressIndicator
+            }
+        }
+    }
+}
+    @Composable
+    fun QuantitySelector() {
+        Row(
+            modifier = Modifier.width(113.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color = Color("#E0E0E0".toColorInt())),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.add),
+                    contentDescription = null,
+                    modifier = Modifier.size(13.dp)
+                )
+            }
+            Text(
+                text = "01",
+                fontSize = 18.sp,
+                fontWeight = FontWeight(700),
+                fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_bold))
+            )
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color = Color("#E0E0E0".toColorInt())),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.apart),
+                    contentDescription = null,
+                    modifier = Modifier.size(13.dp)
                 )
             }
         }
-    } ?: run {
-        // Hiển thị thông báo loading hoặc thông báo lỗi nếu productDetail là null
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Loading...") // Hoặc sử dụng CircularProgressIndicator
-        }
     }
-}
-
-@Composable
-fun QuantitySelector() {
-    Row(
-        modifier = Modifier.width(113.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(30.dp)
-                .clip(RoundedCornerShape(6.dp))
-                .background(color = Color("#E0E0E0".toColorInt())),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.add),
-                contentDescription = null,
-                modifier = Modifier.size(13.dp)
-            )
-        }
-        Text(
-            text = "01",
-            fontSize = 18.sp,
-            fontWeight = FontWeight(700),
-            fontFamily = FontFamily(Font(R.font.nunitosans_7pt_condensed_bold))
-        )
-        Box(
-            modifier = Modifier
-                .size(30.dp)
-                .clip(RoundedCornerShape(6.dp))
-                .background(color = Color("#E0E0E0".toColorInt())),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.apart),
-                contentDescription = null,
-                modifier = Modifier.size(13.dp)
-            )
-        }
-    }
-}
