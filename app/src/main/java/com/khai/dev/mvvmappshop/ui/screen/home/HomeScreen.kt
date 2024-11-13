@@ -120,6 +120,7 @@ fun ProductItem(product: ProductModel, mainNavController: NavController) {
             .width(165.dp)
             .height(253.dp)
             .clickable {
+                // Điều hướng sang ProductDetail với productId
                 mainNavController.navigate("${Screen_main.detail.name}/${product.id}")
             },
         verticalArrangement = Arrangement.SpaceAround,

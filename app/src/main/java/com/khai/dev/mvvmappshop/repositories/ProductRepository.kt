@@ -60,4 +60,15 @@ class ProductRepository {
         }
     }
 
+    // Hàm gọi API để lấy chi tiết sản phẩm dựa trên productId
+    suspend fun getProductById(productId: Long): Result<ProductModel> {
+        return try {
+            val product = RetrofitInstance.productApiService.getProductById(productId)
+            Result.success(product)
+        } catch (e: Exception) {
+            Log.e("ProductRepository", "Error fetching product by ID: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
 }

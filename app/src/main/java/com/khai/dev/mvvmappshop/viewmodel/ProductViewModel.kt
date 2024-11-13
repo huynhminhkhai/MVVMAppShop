@@ -46,4 +46,21 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+    // Hàm lấy chi tiết sản phẩm theo productId
+    private val _productDetail = MutableLiveData<ProductModel?>()
+    val productDetail: LiveData<ProductModel?> = _productDetail
+
+    fun getProductById(productId: Long) {
+        viewModelScope.launch {
+            val result = productRepository.getProductById(productId)
+            if (result.isSuccess) {
+                _productDetail.postValue(result.getOrNull())
+            } else {
+                _productDetail.postValue(null)
+                Log.e("ProductViewModel", "Error fetching Product by ID: ${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
 }
